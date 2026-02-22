@@ -150,3 +150,72 @@ db.customers.insertMany([
     createdAt: new Date("2026-01-18"),
   },
 ]);
+
+// Orders collection
+const customers = db.customers.find({}, { _id: 1, email: 1 }).toArray();
+const products = db.products.find({}, { _id: 1, name: 1, price: 1 }).toArray();
+
+db.orders.insertMany([
+  {
+    customerId: customers[0]._id,
+    status: "delivered",
+    items: [
+      { productId: products[0]._id, name: products[0].name, qty: 2, price: products[0].price },
+      { productId: products[3]._id, name: products[3].name, qty: 1, price: products[3].price },
+    ],
+    totalPrice: products[0].price * 2 + products[3].price * 1,
+    createdAt: new Date("2026-01-05"),
+  },
+  {
+    customerId: customers[0]._id,
+    status: "pending",
+    items: [
+      { productId: products[2]._id, name: products[2].name, qty: 1, price: products[2].price },
+    ],
+    totalPrice: products[2].price * 1,
+    createdAt: new Date("2026-02-15"),
+  },
+  {
+    customerId: customers[1]._id,
+    status: "shipped",
+    items: [
+      { productId: products[1]._id, name: products[1].name, qty: 3, price: products[1].price },
+    ],
+    totalPrice: products[1].price * 3,
+    createdAt: new Date("2026-01-12"),
+  },
+  {
+    customerId: customers[3]._id,
+    status: "delivered",
+    items: [
+      { productId: products[0]._id, name: products[0].name, qty: 1, price: products[0].price },
+      { productId: products[5]._id, name: products[5].name, qty: 2, price: products[5].price },
+    ],
+    totalPrice: products[0].price * 1 + products[5].price * 2,
+    createdAt: new Date("2026-02-01"),
+  },
+]);
+
+db.reviews.insertMany([
+    {
+        productId: products[0]._id,
+        customerId: customers[0]._id,
+        rating: 5,
+        comment: "Jättebra produkt, rekommenderas starkt!",
+        createdAt: new Date("2026-01-10"),
+    },
+    {
+        productId: products[3]._id,
+        customerId: customers[0]._id,
+        rating: 4,
+        comment: "Jäkla bra produkt",
+        createdAt: new Date("2026-01-12"),
+    },
+    {
+        productId: products[0]._id,
+        customerId: customers[3]._id,
+        rating: 4,
+        comment: "Bängeri tuote, suosittelen!",
+        createdAt: new Date("2026-02-05"),
+    }
+]);
